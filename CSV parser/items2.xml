@@ -1,0 +1,171 @@
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">2048.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.08622020000000001</field>
+  <field name="samples">4.7269e-05</field>
+  <field name="...">8.147300000000001e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">4096.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.0140441</field>
+  <field name="samples">5.0996000000000004e-05</field>
+  <field name="...">5.1046000000000006e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">8192.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.013625799999999999</field>
+  <field name="samples">0.000104927</field>
+  <field name="...">6.2938e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">16384.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.0165262</field>
+  <field name="samples">6.4562e-05</field>
+  <field name="...">6.0363000000000005e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">32768.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.014890100000000002</field>
+  <field name="samples">6.120600000000001e-05</field>
+  <field name="...">6.356000000000001e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">65536.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.116552</field>
+  <field name="samples">8.5741e-05</field>
+  <field name="...">7.0142e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">131072.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.11396300000000001</field>
+  <field name="samples">8.0171e-05</field>
+  <field name="...">7.278699999999999e-05</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">262144.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.101035</field>
+  <field name="samples">0.000115297</field>
+  <field name="...">0.000117872</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">524288.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.104808</field>
+  <field name="samples">0.000202161</field>
+  <field name="...">0.000196721</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">1048576.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.101987</field>
+  <field name="samples">0.000599008</field>
+  <field name="...">0.000592235</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">2097152.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.10243699999999999</field>
+  <field name="samples">0.00105194</field>
+  <field name="...">0.00103292</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">4194304.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.101869</field>
+  <field name="samples">0.0020877400000000003</field>
+  <field name="...">0.00209918</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">8388608.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.11369800000000001</field>
+  <field name="samples">0.00950576</field>
+  <field name="...">0.00942809</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">16777216.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.122404</field>
+  <field name="samples">0.028723500000000006</field>
+  <field name="...">0.0284555</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">33554432.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.13887000000000002</field>
+  <field name="samples">0.0625956</field>
+  <field name="...">0.062238199999999994</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">67108864.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.167525</field>
+  <field name="samples">0.138596</field>
+  <field name="...">0.129716</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">134217728.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.36498600000000003</field>
+  <field name="samples">0.269206</field>
+  <field name="...">0.268759</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">268435456.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.631421</field>
+  <field name="samples">0.5450750000000001</field>
+  <field name="...">0.544076</field>
+</data>
+<data>
+  <field name="#">1.0</field>
+  <field name="dimension">536870912.0</field>
+  <field name="xlength">1.0</field>
+  <field name="nbatch">10.0</field>
+  <field name="nsample">0.6825410000000001</field>
+  <field name="samples">0.6434650000000001</field>
+  <field name="...">0.6366970000000001</field>
+</data>
