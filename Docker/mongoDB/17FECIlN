@@ -1,0 +1,17 @@
+to start locate terminal in same folder as docker-compose file
+docker-compose up
+wait for container to start
+in secod terminal:
+check containers up with
+docker ps
+to acces the database you have 2 options, terminal located where the compose file is.
+1) terminal> 
+	sudo docker exec -it AMDcontainer bash
+	mongo
+	showdb
+2) mongodb plugin for vscode
+	download pluggin inside vs code
+	click add conection
+	copy the next link> mongodb://127.0.0.1:27017 
+To stop container
+docker stop AMDcontainer
