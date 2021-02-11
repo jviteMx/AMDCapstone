@@ -6,7 +6,7 @@ def parse_data (dat_file):
         del data[0]
     return data   
 
-data = parse_data ('radix2_dim1_double_n1_c2c_inplace.dat')
+data = parse_data ('C:\Users\javi_\OneDrive\Escritorio\Maestria\AMDCapstone\dat-Files')
 list_of_dicts = []
 keys = data[0].split()[1:]
 
