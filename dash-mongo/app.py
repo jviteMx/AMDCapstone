@@ -1,7 +1,7 @@
 import dash
 import dash_core_components as dcc
 import dash_html_components as html
-import model2
+import model
 import pandas as pd
 import plotly.express as px
 from dash.dependencies import Output, Input
@@ -16,9 +16,9 @@ external_stylesheets = [
 ]
 
 #Get registered data from the model module
-registered_platforms = model2.registered_platforms
-registered_data_groups = model2.registered_data_groups
-registered_libraries = model2.registered_libraries.tolist()
+registered_platforms = model.registered_platforms
+registered_data_groups = model.registered_data_groups
+registered_libraries = model.registered_libraries.tolist()
 registered_libraries.append('All')
 
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -137,7 +137,7 @@ app.layout = html.Div(
     ],
 )
 def update_charts(platform, dataset, versions, graph):
-    filtered_data = model2.get_concat_dataframe(platform, dataset, versions)
+    filtered_data = model.get_concat_dataframe(platform, dataset, versions)
     if filtered_data.empty:
         return px.line()
     else: 
