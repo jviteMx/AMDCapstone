@@ -1,10 +1,10 @@
-import send2trash
 import argparse
-from pathlib import Path
-from mongo_writer import DBInserter
-from registry import register_new_spec_name, register_new_lib_version, register_file_name, write_data_to_mongo
-from statistics import mean, median
 import sys
+from pathlib import Path
+from statistics import mean, median
+import send2trash
+from registry import (register_new_spec_name, register_new_lib_version
+                      ,register_file_name, write_data_to_mongo)
 
 #writer = DBInserter()
 def retrieve_and_parse_files(directory_path_object):
@@ -94,10 +94,8 @@ if not Path(input_path).is_dir():
     sys.exit()
 
 if __name__ == '__main__':
-    path_obj = Path(input_path)
-    spec_dirs = [dir_obj for dir_obj in path_obj.iterdir() if dir_obj.is_dir()]
+    path_object = Path(input_path)
+    spec_dirs = [dir_obj for dir_obj in path_object.iterdir() if dir_obj.is_dir()]
     for spec_path_object in spec_dirs:
-        retrieve_and_parse_files(spec_path_object)
-
-
-       
+        retrieve_and_parse_files(spec_path_object)   
+          
