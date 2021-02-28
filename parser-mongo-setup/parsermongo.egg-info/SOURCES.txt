@@ -1,0 +1,11 @@
+README.md
+setup.py
+parsermongo/__init__.py
+parsermongo/mongo_writer.py
+parsermongo/parsermongo.py
+parsermongo/registry.py
+parsermongo.egg-info/PKG-INFO
+parsermongo.egg-info/SOURCES.txt
+parsermongo.egg-info/dependency_links.txt
+parsermongo.egg-info/requires.txt
+parsermongo.egg-info/top_level.txt
