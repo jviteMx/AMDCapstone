@@ -1,0 +1,5 @@
+# /home/AMD/feizheng/work/tags/rocm-3.9.0-pre/rocFFT/scripts/perf/timing.py -w /home/AMD/feizheng/work/tags/rocm-3.9.0-pre/rocFFT/build/clients/staging/rocfft-rider -o /home/AMD/feizheng/work/tags/rocm-3.9.0-pre/rocFFT/scripts/perf/MI60_rocFFT_rocm3.9/radix5_dim3_double_n1_ratio_1_1_c2c_outofplace.dat -N 10 -b 1 -x 25 -X 1024 -y 25 -Y 1024 -z 25 -Z 1024 -r 5 -D -1 -d 3 -f double
+# dimension	xlength	ylength	zlength	nbatch	nsample	samples ...
+3	25	25	25	1	10	0.000124375	8.5892e-05	7.8899e-05	6.2638e-05	5.8269e-05	5.83e-05	5.798e-05	5.7809e-05	5.818e-05	7.5232e-05
+3	125	125	125	1	10	0.000883766	0.000751988	0.000761877	0.0007658350000000001	0.0007524680000000001	0.0007648420000000001	0.000756176	0.00075341	0.000772687	0.000768799
+3	625	625	625	1	10	0.0667396	0.0667528	0.0673145	0.0671861	0.0671017	0.0668082	0.0674397	0.0674888	0.0676636	0.0669939
