@@ -1,0 +1,27 @@
+version: '3'
+services:
+  database:
+    image: 'mongo'
+    container_name: 'AMDcontainer'
+    environment:
+      - MONGO_INITDB_DATABASE=ROCmdb
+      - MONGO_INITDB_USERNAME=AMDroot
+      - MONGO_INITDB_PASSWORD=UofCroot
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro 
+      - ./mongo-volume:/data/db 
+    ports:
+      - '27017:27017'
+  dash:
+    build:
+      context: .
+      dockerfile: dockerfile.dash
+    container_name: dash_dash
+    command: python app.py
+    volumes:
+      - .:/code
+    ports:
+      - "80:8080"
+    depends_on:
+      - database
+    restart: always
