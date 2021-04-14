@@ -1,4 +1,4 @@
-.vscode
+.vscode/
 pargo.egg-info/
 .python-version
 build/
