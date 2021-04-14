@@ -25,14 +25,13 @@ class AnnotationFactory:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.type_hint})"
 
-STRING_HINT =  Union[AnnotationFactory(str), None]
-STRING = STRING_HINT['hardware id or rocm version, None']
+STRING =  Union[str, None]
 PATH =  AnnotationFactory(str)
 PATH = PATH['path']
 PATH_LIST = AnnotationFactory(list)
-DAT_FILE_PATH_HINT = Union[PATH, PATH_LIST[PATH], None]
-DAT_FILE_PATH = DAT_FILE_PATH_HINT['path, paths, None']
+PATH_LIST = PATH_LIST['list of paths']
+DAT_FILE_PATH = Union[str, list, None]
 STRING_LIST = AnnotationFactory(list)
-STRING_LIST = PATH_LIST['string']
+STRING_LIST = STRING_LIST['list of string']
 DICT = AnnotationFactory(dict)
 DICT = DICT['key: string, value: list']
