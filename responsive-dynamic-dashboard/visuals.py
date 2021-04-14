@@ -249,11 +249,11 @@ def sample_dataframes(ls_of_dfs, sample_pt):
     for df in ls_of_dfs:
         df = copy.deepcopy(df)
         df.loc[:,'rocblas-Gflops'] = df.loc[:,'rocblas-Gflops'].astype(float)
-        df.loc[:,'problem'] = str(i)
+        df['problem'] = str(i)
         sliced = df.iloc[i:i+108, :]
         sliced = copy.deepcopy(sliced)
         for j in range(i, i+108):
-            sliced.loc[iter,'problem'] = str(j)
+            sliced.loc[j,'problem'] = str(j)
         sliced_df.append(sliced)
     return sliced_df, j
 
