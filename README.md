@@ -40,7 +40,7 @@ There are two ways to access the data base
 ##############################################################################################################################
 2. Database
 
-
+Create a folder named assests in your directory
 
 
 
