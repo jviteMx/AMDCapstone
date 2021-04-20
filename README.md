@@ -9,13 +9,55 @@ The project scope is to develop a framework capable of testing, tracking, storin
 
 User Guide
 
-1.docker
-2.database
-3.parser lib
-4.running dashboard
+1. Docker
+##############################################################################################################################
+1. In order to start, run a CMD line as an adminsitrator
+2. Navigate to the path of the folder the "docker-compose" file is in
+3. Run the command: docker-compose up
+4. Open a second CMD line and run it as an administrator
+5. Optional step, if you want to check the status of the containers run the command : docker ps
+
+There are two ways to access the data base
+1) via terminal
+	1.a)if on linux or Mac run command: sudo docker exec -it AMDcontainer bash
+	1.b)if on windows run command: docker exec -it AMDcontainer bash
+	2.) a line the says "Root"with a memory address pops up propmting to enter a command.
+		Enter command: mongo
+	3.) to view the data base enter command: showdb
+
+2) via mongodb plugin for vscode
+	1) go to extensions in vscode and search for mongodb plugin and download
+	2) Once downloaded the mongodb icon will appear on the left side of your IDE
+	3) click on the icon
+	4) on the left side of the screen click "add a connection", a text bar will appear at the top of your ide
+	5) copy and paste this link and hit enter: mongodb://127.0.0.1:27020
+
+6. In order to stop the docker container from running, on the second terminal, type 'exit' and enter, then 'exit' and enter agian untill
+	you have naviagted back to the root prompt
+7. Run the command: docker stop AMDcontainer
+8. you are now safe to close both terminals and all relevant windows
+
+##############################################################################################################################
+2. Database
 
 
+
+
+
+##############################################################################################################################
+3. Parser Library
+
+##############################################################################################################################
+4. Running Dashboard
+
+
+
+##############################################################################################################################
 Maintenace guide
-1.adding new ROCm libraries to the parser package
-2.adding new fnctionalities to dash
-3.updating the database
+1. Adding new ROCm libraries to the parser package
+
+
+2. Adding new fnctionalities to dash
+
+
+3. Updating the database
