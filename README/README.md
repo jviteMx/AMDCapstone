@@ -69,7 +69,7 @@ The goal is to load processed test suite data to our database. But what if we ha
 ![strict_dir_path example](Tree2.png)
 
 So for the second example, the valid pass is `strict_dir_path = <path to assets folder>`
-Note that irrespective of the number of .dat files, the structure is obeyed. The container folder can be called anything.
+Note that irrespective of the number of .dat files, the structure is obeyed. The container folder can be named anything. It was intentionally ignored in two of the screenshot pictures but note that that is the folder whose path is passed.
 
 **Option 2**, Provide the individual keyword arguments values. `specs_file_path` can take either a single path or a list of paths for the same rocm version and and GPU server.
 
