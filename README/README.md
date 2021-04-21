@@ -54,7 +54,7 @@ There are two ways to access the data base
 ##### `activate_process` method call options
 This method takes only `keyword arguments`
 Ensure to read the docstring for this method to know the parameters and their data types. There is also annotation hints provided for each parameter (Can use type-checkers)
-The goal is to load processed test suite data to our database. But what if we have several test suite files for the same rocm version or several test suite files for multiple rocm versions and to go further several test suite file for multiple rocm versions for multiple GPU servers. It wouldn't be ideal to call the `activate_process` method for each test suite file to process. See [Processing new ROCM libraries](### Processing new ROCM libraries) below for more on this method. You must provide argument values for these:
+The goal is to load processed test suite data to our database. But what if we have several test suite files for the same rocm version or several test suite files for multiple rocm versions and to go further several test suite file for multiple rocm versions for multiple GPU servers. It wouldn't be ideal to call the `activate_process` method for each test suite file to process. See [Processing new ROCM libraries](### processing-new-rocm-libraries) below for more on this method. You must provide argument values for these:
 - `dat_file_path`. The `.dat` file path. Doesn't accept other extensions
 - `platform`. The GPU hardware id. The prefered id format is `GPU-Server-N` where N is an integer. 
 - `specs_file_path` Path to the `.txt` file that contains the GPU server specifications
