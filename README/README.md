@@ -54,7 +54,7 @@ There are two ways to access the data base
 ##### `activate_process` method call options
 This method takes only `keyword arguments`
 Ensure to read the docstring for this method to know the parameters and their data types. There is also annotation hints provided for each parameter (Can use type-checkers)
-The goal is to load processed test suite data to our database. But what if we have several test suite files for the same rocm version or several test suite files for multiple rocm versions and to go further several test suite file for multiple rocm versions for multiple GPU servers. It wouldn't be ideal to call the `activate_process` method for each test suite file to process. See [Processing new ROCM libraries](#-processing-new-rocm-libraries) for more on this method. You must provide argument values for these:
+The goal is to load processed test suite data to our database. But what if we have several test suite files for the same rocm version or several test suite files for multiple rocm versions and to go further several test suite file for multiple rocm versions for multiple GPU servers. It wouldn't be ideal to call the `activate_process` method for each test suite file to process. See [Processing new ROCM libraries](###-processing-new-rocm-libraries) for more on this method. You must provide argument values for these:
 - `dat_file_path`. The `.dat` file path. Doesn't accept other extensions
 - `platform`. The GPU hardware id. The prefered id format is `GPU-Server-N` where N is an integer. 
 - `specs_file_path` Path to the `.txt` file that contains the GPU server specifications
@@ -84,10 +84,10 @@ This app has not been deployed, and only localhost run is available
 4) Follow the link that is generated after running app.py
 
 
-## Maintenace guide
+## Maintenance guide
 
-The current libraries that are programed for use are FFT, Rand and Blas  
-Any other library that is desired to be included requires adapting the dashboard. The current dashboard can only make simple `x`, `y` plots for line and bar graphs for new libraries when the x and y are specified when calling the activate_process method of `pargo.template.LibrarySuiteProcessor` derived class.
+The libraries currently programmed for use are `rocFFT`, `rocRAND` and `rocBLAS`  
+Any other library that is desired to be included requires adapting the dashboard. The current dashboard can only make simple `x`, `y` plots for line and bar graphs for new libraries when the x and y are specified when calling the activate_process method of `pargo.template.LibrarySuiteProcessor` derived class. To make custom plots, A new version of the dashboard must be implemented. Recommended place for visuals is in the `visuals.py` module
 
 ### Processing new ROCM libraries
 For libraries that are not already implemented (ie, not fft, rand or blas), a new class needs to be created that inherits from the base class `LibrarySuiteProcessor` that is in the `template` module.  The `process_data` method of the base class must be overridden and implemented to do the processing. Check the docstrings of the class and method for more information on this. Also refer to the implemented derived classes to see examples.
