@@ -1,6 +1,6 @@
 # MIT LINCENCE. 2021
 #
-# This file is part of an academic capstone project,
+# This file is part of an academic capstone project,reasosnd
 # and it is made for AMD as part of efforts to automate
 # the open source ROCM math libraries performance analytics.
 # Contact The AMD rocm team for use and improvements on the project.
@@ -11,6 +11,7 @@
 from typing import Annotated
 from typing import Union
 
+
 class AnnotationFactory:
     """Annotate the arg variables"""
     def __init__(self, type_hint):
@@ -19,19 +20,20 @@ class AnnotationFactory:
     def __getitem__(self, key):
         if isinstance(key, tuple):
             return Annotated[(self.type_hint, ) + key]
-        else:
-            return Annotated[self.type_hint, key]
+        return Annotated[self.type_hint, key]
 
     def __repr__(self):
         return f"{self.__class__.__name__}({self.type_hint})"
 
-STRING =  Union[str, None]
-PATH =  AnnotationFactory(str)
-PATH = PATH['path']
+
+STRING = Union[str, None]
+PATH = AnnotationFactory(str)
+PATH = PATH[('path',
+            'path to .dat file for suite-data or .txt for specs info')]
 PATH_LIST = AnnotationFactory(list)
-PATH_LIST = PATH_LIST['list of paths']
+PATH_LIST = PATH_LIST['strings']
 DAT_FILE_PATH = Union[str, list, None]
 STRING_LIST = AnnotationFactory(list)
-STRING_LIST = STRING_LIST['list of string']
+STRING_LIST = STRING_LIST['strings']
 DICT = AnnotationFactory(dict)
 DICT = DICT['key: string, value: list']

@@ -7,26 +7,25 @@
 # The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
 # Reach Victor Tuah Kumi on LinkedIn
 
-"""Processes rocfft library data by customizing the base LibraryProcessor by overriding
+"""Processes rocfft library data by customizing the base LibrarySuiteProcessor by overriding
 the process_data method and calling db writer interface to write to mongoDB"""
 
 from statistics import mean, median
-from pargo.template import LibraryProcessor
-class FFTProcessor(LibraryProcessor):
+from pargo.template import LibrarySuiteProcessor
+class FFTSuiteProcessor(LibrarySuiteProcessor):
     """rocFFT suite processor.
 
     Initializes the base processor with the library name and mongo db address and
     focuses on processing the .dat suite data (passed to the process_data
-    method as a list of lines of the file and Pathlib Path object of the file) and
+    method as a list from readlines() of the file, and Pathlib Path object of the file) and
     suite name customizing.
     """
+
+    LIBRARY_NAME = 'rocFFT'
     def __init__(self):
-        self.library_name = 'rocFFT'
-        self.CLIENT_IP = 'localhost'
-        self.CLIENT_PORT = 27017
         self.suite_name = ''
         self.suite_data = ''
-        LibraryProcessor.__init__(self, self.CLIENT_IP, self.CLIENT_PORT, self.library_name)
+        LibrarySuiteProcessor.__init__(self, library_name=FFTSuiteProcessor.LIBRARY_NAME)
 
     def process_data(self, list_data, file_path_object):
         data = list_data
@@ -34,7 +33,7 @@ class FFTProcessor(LibraryProcessor):
         list_of_dicts = []
         keys = data[0].split()[1:]
         del keys[-1]
-        keys.extend(('mean', 'median')) 
+        keys.extend(('mean', 'median'))
         for i in range(1, len(data)):
             values, sample_values = self.fulfil_dimensionwise_values(data, i, keys)
             values_extended = self.append_statistics(values, sample_values)
@@ -86,6 +85,6 @@ class FFTProcessor(LibraryProcessor):
         renamed = rename_part1 + rename_part2 + rename_part3
         return renamed.lower()
 #Uncomment the below for use as script with strict dir path
-# if __name__ == '__main__':
-#     fft = FFTProcessor()
-#     fft.activate_process(strict_dir_path='assets')
+if __name__ == '__main__':
+    fft = FFTSuiteProcessor()
+    fft.activate_process(strict_dir_path='assets')

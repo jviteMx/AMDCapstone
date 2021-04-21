@@ -7,14 +7,16 @@
 # The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
 # Reach Victor Tuah Kumi on LinkedIn
 
-"""Processes all library data and calls db writer interface to write to mongoDB."""
+"""Processes all library data and calls db writer interface
+to write to mongoDB."""
 
 from pathlib import Path
-from pargo.registry import DBWriter
-from pargo.registry import ModelDictionary
+from pargo.registry import MongoDBWriter
+from pargo.registry import DictionaryModel
 from annotate import annotate
 
-class LibraryProcessor(DBWriter):
+
+class LibrarySuiteProcessor(MongoDBWriter):
     """Library processing base class.
 
     Processes any rocm math library test suites and hardware specs with the goal of providing
@@ -35,38 +37,41 @@ class LibraryProcessor(DBWriter):
     PATHString = annotate.PATH
     List = annotate.STRING_LIST
     Dictionary = annotate.DICT
-    def __init__(self, client_ip, client_port, library_name):
+
+    def __init__(self, library_name):
         self.library_name = library_name
-        self.data = ModelDictionary()
+        self.data = DictionaryModel()
         self.added_fields = ''
         self.plots = ''
         self.rocm_version = ''
         self.axis_titles = ''
         self.hardware_id = ''
         self.specs_data = ''
-        DBWriter.__init__(self, self.data, client_ip, client_port)
+        MongoDBWriter.__init__(self, self.data)
 
-    def activate_process(self, *, platform:StringORNone=None,
-                                  dat_file_path:PATHListORStringORNone=None,
-                                  version:StringORNone=None,
-                                  specs_file_path:PATHString=None,
-                                  strict_dir_path:PATHString=None,
-                                  plots:List=None,
-                                  added_fields:Dictionary=None,
-                                  axis_titles:List=None) -> None:
+    def activate_process(self, *, platform: StringORNone = None,
+                         dat_file_path: PATHListORStringORNone = None,
+                         version: StringORNone = None,
+                         specs_file_path: PATHString = None,
+                         strict_dir_path: PATHString = None,
+                         plots: List = None,
+                         added_fields: Dictionary = None,
+                         axis_titles: List = None) -> None:
         """After instantiating the base class, this method is called with the
-        interested keyword args. This must be done only after the derived class has overriden the
-        process_data method.
+        interested keyword args. This must be done only after the derived
+        class has overriden the process_data method.
         kwargs;
-        platform: The hardware id. Should be unique for all NEW hardware. check db to avoid
-                  overiding existing db specs data. Preferred format when unque identification
-                  is difficult is GPU-Server-<No> eg. GPU-Server-1
-                  This value should be None when strict_dir_path is not None as it will be infered
-                  from the strict path structure.
-        dat_file_path: The path to the .dat test suite file. This can be a list of test suite paths
-                       for tests run on the same hardware and rocm version.
-                       This value should be None when strict_dir_path is not None as it will
-                       be infered from the strict path structure
+        platform: The hardware id. Should be unique for all NEW hardware.
+                  check db to avoid overiding existing db specs data.
+                  Preferred format for unque identification
+                  is GPU-Server-<No> eg. GPU-Server-1
+                  This value should be None when strict_dir_path is not None
+                  as it will be infered from the strict path structure.
+        dat_file_path: The path to the .dat test suite file. This can be a
+                       list of test suite paths for tests run on the same
+                       hardware and rocm version. This value should be None
+                       when strict_dir_path is not None as it will be infered
+                       from the strict path structure.
         version: The rocm version. None for when strict path is used as it will be infered
         specs_file_path: The path to the .txt specs file. None for when strict path is used as
                          it will be infered.
@@ -93,7 +98,7 @@ class LibraryProcessor(DBWriter):
             path_object = Path(strict_dir_path)
             platform_dirs = [dir_obj for dir_obj in path_object.iterdir() if dir_obj.is_dir()]
             for platform_path_object in platform_dirs:
-                self.retrieve_and_parse_files(platform_path_object) 
+                self.retrieve_and_parse_files(platform_path_object)
         if platform and dat_file_path and version and specs_file_path:
             self.rocm_version = version
             self.hardware_id = platform
@@ -102,7 +107,7 @@ class LibraryProcessor(DBWriter):
                 for file_item in dat_file_path:
                     self.process_dat_files(Path(file_item))
             else:
-                self.process_dat_files(Path(dat_file_path))   
+                self.process_dat_files(Path(dat_file_path))
 
     def retrieve_and_parse_files(self, directory_path_object):
         """If strict directory path option is taken, processes all the
@@ -115,8 +120,8 @@ class LibraryProcessor(DBWriter):
         spec_txt_path = [obj for obj in sub_dirs if not obj.is_dir()]
         for obj in sub_dirs:
             if obj.is_dir():
-                self.process_platform_info(spec_txt_path[0], obj.name) 
-                print(obj.name, spec_txt_path[0].name)
+                print(obj.name, 'test suite data')
+                self.process_platform_info(spec_txt_path[0], obj.name)
                 self.rocm_version = obj.name
                 self.hardware_id = obj.parent.name
                 self.process_dat_files(obj)
@@ -128,6 +133,7 @@ class LibraryProcessor(DBWriter):
         manager for safe open and close of file. Uses open method
         of Pathlib Path object.
         """
+        print(file_path_object.parent.name, file_path_object.name)
         host_keys, device_keys, host_values, device_values = [],[],[],[]
         with file_path_object.open() as file:
             data = file.readlines()

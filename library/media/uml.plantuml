@@ -1,0 +1,77 @@
+@startuml Parser Library
+skinparam classAttributeIconSize 0
+package "pargo" #DDDDDD {
+    class PymongoWriter{
+        + db_client: PymongoClient
+        + write_data_to_mongo()
+    }
+    class PymongoClient{
+        + user_name
+        + password
+        + host
+        + db_name
+        + affirm_client()
+    }
+    class DictionaryModel{
+        + make_fields()
+    }
+    class MongoDBWriter{
+        + data: DictionaryModel
+        + inserter: PymongoClient
+        + register_data()
+    }
+    class LibrarySuiteProcessor{
+        {static} StringORNone:_UnionGenericAlias
+        {static} PATHListORStringORNone:AnnotationFactory
+        {static} PATHString:AnnotationFactory
+        {static} List:AnnotationFactory
+        {static} Dictionary:AnnotationFactory
+        + activate_process()
+        + retrieve_and_parse_files()
+        + process_platform_info()
+        + process_dat_files()
+        + open_and_process_data()
+        + process_data()
+        + write_to_db()
+    }
+    class FFTSuiteProcessor{
+        {static} LIBRARY_NAME:str
+        + suite_name: str
+        + suite_data: ListOfDicts
+        + process_data()
+        + process_file_name()
+    }
+    class BLASSuiteProcessor{
+        {static} LIBRARY_NAME:str
+        + suite_name: str
+        + suite_data: ListOfDicts
+        + process_data()
+        + process_file_name()
+    }
+    class RANDSuiteProcessor{
+        {static} LIBRARY_NAME:str
+        + suite_name: str
+        + suite_data: ListOfDicts
+        + process_data()
+        + process_file_name()
+    }
+    PymongoClient o-- PymongoWriter 
+    PymongoWriter <|--right MongoDBWriter
+    DictionaryModel o--left MongoDBWriter
+    PymongoClient *-- MongoDBWriter
+    DictionaryModel *-- LibrarySuiteProcessor
+    MongoDBWriter <|-- LibrarySuiteProcessor
+    LibrarySuiteProcessor <|-- FFTSuiteProcessor
+    LibrarySuiteProcessor <|-- BLASSuiteProcessor
+    LibrarySuiteProcessor <|-- RANDSuiteProcessor
+
+}
+
+package "annotate" #DDDDDD {
+    class AnnotationFactory{
+        + __getitem__()
+    }
+}
+
+
+@enduml

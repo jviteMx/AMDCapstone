@@ -12,13 +12,16 @@ the data to be written to the database. Also implements
 the methods for writing the dictionary data to the database.
 """
 
-from pargo.mongowrite import ClientWriter
-from pargo.mongowrite import MongoWriter
+from pargo.mongowrite import PymongoClient
+from pargo.mongowrite import PymongoWriter
 
-class ModelDictionary(dict):
+
+class DictionaryModel(dict):
     """Dictionary class"""
-    def make_fields(self, *, hardware_id, specs_ls_of_dict, library_name, rocm_version, suite_name,
-                    added_fields=None, suite_data, plots=None, axis_titles=None):
+    def make_fields(self, *, hardware_id, specs_ls_of_dict,
+                    library_name, rocm_version, suite_name,
+                    added_fields=None, suite_data, plots=None,
+                    axis_titles=None):
         """Makes the dictionary object data fields"""
         self['hardware_id'] = hardware_id
         self['specs_data'] = specs_ls_of_dict
@@ -34,22 +37,23 @@ class ModelDictionary(dict):
         self['plots'] = plots
         self['axis_titles'] = axis_titles
         if self['library_name'].lower() == 'rocfft' or self['library_name'].lower() == 'rocblas':
-            self['field_types'] =['HardWare-ID','Test-Suite','Version(s)','Graph','SpeedUp-Options']
+            self['field_types'] =['HardWare-ID', 'Test-Suite', 'Version(s)', 'Graph', 'SpeedUp-Options']
             self['plots'] = ['line', 'line+marker']
         if self['library_name'].lower() == 'rocfft':
-            self['axis_titles'] = ['xlength','median']
+            self['axis_titles'] = ['xlength', 'median']
         if  self['library_name'].lower() == 'rocblas':
-            self['axis_titles'] = ['rocblas-Gflops','us']
+            self['axis_titles'] = ['rocblas-Gflops', 'us']
 
-class DBWriter(MongoWriter):
+
+class MongoDBWriter(PymongoWriter):
     """Implements methods for writing data to the db and registering names to
      be used on dashboard"""
-    def __init__(self, dictobj, client_ip, client_port):
+    def __init__(self, dictobj):
         self.data = dictobj
-        self.inserter = ClientWriter(client_ip, client_port)
+        self.inserter = PymongoClient()
         self.suite_collection_name = ''
         self.aux_db = ''
-        MongoWriter.__init__(self, self.inserter)
+        PymongoWriter.__init__(self, self.inserter)
 
     def run_writer(self):
         """Creates the collection name for the suite data and the auxiliary db that hosts
@@ -59,7 +63,7 @@ class DBWriter(MongoWriter):
             self.data['library_name'].lower() + '/' + self.data['rocm_version'].lower() + \
             '/'  + self.data['suite_name'].lower()
 
-        self.aux_db = 'REG_DATA'
+        self.aux_db = 'aux-db'
         self.register_data()
 
     def __write_data_to_mongo(self):
@@ -119,28 +123,27 @@ class DBWriter(MongoWriter):
     def __write_specs_to_mongo(self):
         collection_name = self.data['hardware_id'].lower() + '/' + \
                     self.data['library_name'].lower() + '/' + self.data['rocm_version'].lower() + \
-                    '/'  + self.data['suite_name'].lower() +  'hostspecs'
-        ls_of_dicts =  [self.data['specs_data'][0]['Host info']]
+                    '/' + self.data['suite_name'].lower() + 'hostspecs'
+        ls_of_dicts = [self.data['specs_data'][0]['Host info']]
         self.write_data_to_mongo(self.aux_db, collection_name, ls_of_dicts)
 
         collection_name = self.data['hardware_id'].lower() + '/' + \
-              self.data['library_name'].lower() + '/' + self.data['rocm_version'].lower() + \
-              '/'  + self.data['suite_name'].lower() +  'devicespecs'
-        ls_of_dicts =  [self.data['specs_data'][1]['Device info']]
+            self.data['library_name'].lower() + '/' + self.data['rocm_version'].lower() + \
+            '/' + self.data['suite_name'].lower() + 'devicespecs'
+        ls_of_dicts = [self.data['specs_data'][1]['Device info']]
         self.write_data_to_mongo(self.aux_db, collection_name, ls_of_dicts)
 
     def __write_gpu_rocm_specs(self):
         """Redundant method collection to be used when db is collapsed to only one."""
-        collection_name =  self.data['hardware_id'].lower() + '/' + \
-                           self.data['rocm_version'] + '/' + 'hostspecs'
-        ls_of_dicts =  [self.data['specs_data'][0]['Host info']]
+        collection_name = self.data['hardware_id'].lower() + '/' + \
+            self.data['rocm_version'] + '/' + 'hostspecs'
+        ls_of_dicts = [self.data['specs_data'][0]['Host info']]
         self.write_data_to_mongo(self.aux_db, collection_name, ls_of_dicts)
 
-        collection_name =  self.data['hardware_id'].lower() + '/' + \
-                         self.data['rocm_version'] + '/' + 'devicespecs'
-        ls_of_dicts =  [self.data['specs_data'][1]['Device info']]
+        collection_name = self.data['hardware_id'].lower() + '/' + \
+            self.data['rocm_version'] + '/' + 'devicespecs'
+        ls_of_dicts = [self.data['specs_data'][1]['Device info']]
         self.write_data_to_mongo(self.aux_db, collection_name, ls_of_dicts)
-
 
 
     def register_data(self):
