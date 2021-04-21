@@ -43,7 +43,13 @@ class DictionaryModel(dict):
             self['axis_titles'] = ['xlength', 'median']
         if  self['library_name'].lower() == 'rocblas':
             self['axis_titles'] = ['rocblas-Gflops', 'us']
-
+        if  self['library_name'].lower() == 'rocrand':
+            self['axis_titles'] = ['uniform-unit', 'uniform-float', 'uniform-double', 'normal-float',
+                'normal-double', 'log-normal-float','log-normal-double', 'poisson lambda 10.0',
+                'discrete-poisson lambda 10.0', 'discrete-custom']
+            self['field_types'] =  ['HardWare-ID','Test-Suite', 'Version(s)', 'Graph', 'SpeedUp-Options', 'Algorithm']
+            self['added_field_values'] = [['xorwow', 'mrg32k3a', 'mtgp32', 'philox', 'sobol32']]
+            self['plots'] = ['bar']
 
 class MongoDBWriter(PymongoWriter):
     """Implements methods for writing data to the db and registering names to

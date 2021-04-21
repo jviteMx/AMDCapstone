@@ -73,7 +73,7 @@ Note that irrespective of the number of .dat files, the structure is obeyed. The
 
 **Option 2**, Provide the individual keyword arguments values. `specs_file_path` can take either a single path or a list of paths for the same rocm version and and GPU server.
 
-You are good to run your program now!!
+You are good to run your program now!! Check `example1.py` and `example2.py` in the README folder.
 
 
 ### Running Dashboard
