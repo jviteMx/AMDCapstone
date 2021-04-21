@@ -32,7 +32,7 @@ There are two ways to access the data base
 	2) Once downloaded the mongodb icon will appear on the left side of your IDE
 	3) click on the icon
 	4) on the left side of the screen click "add a connection", a text bar will appear at the top of your ide
-	5) copy and paste this link and hit enter: mongodb://127.0.0.1:27020
+	5) eg. if localhost, you can copy and paste this link and hit enter: mongodb://127.0.0.1:27020
 
 6. In order to stop the docker container from running, on the second terminal, type 'exit' and enter, then 'exit' and enter agian untill
 	you have naviagted back to the root prompt
@@ -40,64 +40,40 @@ There are two ways to access the data base
 8. you are now safe to close both terminals and all relevant windows
 
 
-### Loading to the Database
+### Processing Test Suites and Loading to the Database (Using `pargo` for implemented library test suite parsers; `rocFFT, rocBLAS, rocRAND`)
+##### Initial Steps
+- Ensure that the mongo is alive.
+- Install the pargo library in your project virtual environment (the wheel is in the `dist` folder).
+- Create a `.env` file (preferably in your project's root folder.)
+- Provide the credentials to the mongo db database in the `.env` file (check the `.env.example` file for the valid keys). NB: When no `.env` file is provided, `pargo` defaults to attempting to load the data to `localhost:27017`. You can also provide only the credential for the `PARGO_HOST` if no user and password is specified for the database. Thus you are not required to provide all the credentials unless a user and password exist for the database.
 
-This process works for the libraries FFT, Rand and Blas
+##### Further Steps
+- import the library test suite parser classes from the parser modules  eg. `from pargo.fft import FFTSuiteProcessor` imports the class `FFTSuiteProcessor`. You can also import the implemented parser modules and not the classes. eg. `from pargo import <modlue>` module can be `fft`, `blas`, `rand`
+- To run the parser, you need to instantiate a library suite processor class and call its `activate_process` method. This method offers several valid argument options that we discuss below
 
-1) Install pargo library in your project virtual environment
-2) import the library parser class required (ie. FFTSuiteProcessor, BLASSuiteProcessor, RANDSuiteProcessor) from pargo.
+##### `activate_process` method call options
+This method takes only `keyword arguments`
+Ensure to read the docstring for this method to know the parameters and their data types. There is also annotation hints provided for each parameter (Can use type-checkers)
+The goal is to load processed test suite data to our database. But what if we have several test suite files for the same rocm version or several test suite files for multiple rocm versions and to go further several test suite file for multiple rocm versions for multiple GPU servers. It wouldn't be ideal to call the `activate_process` method for each test suite file to process. See [Processing new ROCM libraries](### Processing new ROCM libraries) below for more on this method. You must provide argument values for these:
+- `dat_file_path`. The `.dat` file path. Doesn't accept other extensions
+- `platform`. The GPU hardware id. The prefered id format is `GPU-Server-N` where N is an integer. 
+- `specs_file_path` Path to the `.txt` file that contains the GPU server specifications
+- `version`. The rocm version
 
-	Ex. `from pargo.rand import RANDSuiteProcessor`
- 
-3) Instantiate the parser
-	
-	Ex. `rand = RANDSuiteProcessor()`
-	
-4) Call the libraries `activate_process` method on the instantiated object (`rand`)
-	
-	`rand.activate_process()`
-	
-	#### Specify the folder path
-	1. Use the strict directory path argument in the activate_process method. Create a folder on your computer, ex "assets".
-		1. `strict_dir_path = "path to assets folder"`
-		2. An example for the folder structure:
+** Option 1**, use `strict_dir_path = <path_to_structured_folder>`. This is the preferred approach especially for processing multiple test suites at a go. A folder is structured in such a way that the above listed parameter arguments are inferred logically. NB: This is strict and the order must be obeyed. see examples below.
 
+![strict_dir_path example](Tree3.png)
 
+![strict_dir_path example](Tree.png)
 
-		![Folder Structure](Tree.png)
+![strict_dir_path example](Tree2.png)
 
+So for the second example, the valid pass is `strict_dir_path = <path to assets folder>`
+Note that irrespective of the number of .dat files, the structure is obeyed. The container folder can be called anything.
 
-		-The following can be changed to suite your needs:  
-		
-		-assets: the folder name  
-		-GPU-Server-1: the name of the hardware you are running  
-		-rocm3.6: the version of the test data 
-		
-		Note: the spec.txt file must be under the hardware folder, bot not inside the version folder  
-		
-	#### Specify file path	
-	2. Use the dat_file_path argument in the `activate_process` method
-		1. A single file path
-		 	dat_file_path = "path to .dat files"
+**Option 2**, Provide the individual keyword arguments values. `specs_file_path` can take either a single path or a list of paths for the same rocm version and and GPU server.
 
-		2. A list of file paths
-			dat_file_path = "path to .dat files"
-	
-
- 
-			activate_process(self, *, platform: StringORNone = None,
-					 dat_file_path: PATHListORStringORNone = None,
-					 version: StringORNone = None,
-					 specs_file_path: PATHString = None,
-					 strict_dir_path: PATHString = None,
-					 plots: List = None,
-					 added_fields: Dictionary = None,
-					 axis_titles: List = None) -> None:
-
-
-5) For libraries that are not already implemented (ie, not fft, rand or blas), a new class needs to be created that inherits from the base class `LibrarySuiteProcessor` of pargo.  The process_data function must be overridden to suite the preprocessing needs of the library being added. For more information check section ____ of the maintenance guide.
-
-
+You are good to run your program now!!
 
 
 ### Running Dashboard
@@ -107,22 +83,20 @@ This process works for the libraries FFT, Rand and Blas
 3) Run app.py in an IDE of your choice
 4) Follow the link that is generated by running app.py
 
-### Running analyze.py
-
 
 ## Maintenace guide
 
 The current libraries that are programed for use are FFT, Rand and Blas  
-Any other library that is desired to be included requires the creation of a new parser as well as adapting the dashboar and database to accept these new libraries
+Any other library that is desired to be included requires adapting the dashboard. The current dashboard can only make simple `x`, `y` plots for line and bar graphs for new libraries when the x and y are specified when calling the activate_process method of `pargo.template.LibrarySuiteProcessor` derived class.
 
-### Adding new ROCm libraries to the parser package
+### Processing new ROCM libraries
+For libraries that are not already implemented (ie, not fft, rand or blas), a new class needs to be created that inherits from the base class `LibrarySuiteProcessor` that is in the `template` module.  The `process_data` method of the base class must be overridden and implemented to do the processing. Check the docstrings of the class and method for more information on this. Also refer to the implemented derived classes to see examples.
 
-
-parser-mongo-library  ->> library -->> pargo -->>  template.py 
+After overriding this method, the derived class can be instantiated and the `activate_process` method can be called with the needed argument values. Note that you must provide information for all necessary arguments. Refer to the docstring.
 
 
 ### Adding new functionalities to dash
-
+Depending on the library suite, there could be a need for customization of the plots. To customize, You have to make a new version of the application. In this version, you can add the custom plots to the `visuals.py` module. Note that there is no admin for the dashboard so all additional information needed in the database must be provided by `pargo`. Hence pargo could also be modified accordingly.
 
 ### Updating the database
 
