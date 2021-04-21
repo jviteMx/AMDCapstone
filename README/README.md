@@ -21,11 +21,11 @@ The project scope is to develop a framework capable of testing, tracking, storin
 
 There are two ways to access the data base
 1) via terminal
-	1.a)if on linux or Mac run command: sudo docker exec -it AMDcontainer bash
-	1.b)if on windows run command: docker exec -it AMDcontainer bash
-	2.) a line the says "Root"with a memory address pops up propmting to enter a command.
-		Enter command: mongo
-	3.) to view the data base enter command: showdb
+	1.  a)if on linux or Mac run command: sudo docker exec -it AMDcontainer bash  
+	1.  b)if on windows run command: docker exec -it AMDcontainer bash  
+	2.) a line the says "Root"with a memory address pops up propmting to enter a command.  
+		Enter command: mongo  
+	3.) to view the data base enter command: showdb  
 
 2) via mongodb plugin for vscode
 	1) go to extensions in vscode and search for mongodb plugin and download
