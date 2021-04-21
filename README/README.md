@@ -104,4 +104,4 @@ Depending on the library suite, there could be a need for customization of the p
 
 ## Contributors
 
-Ahmed Iqbal, Aidan Forester, Javier Vite, Victor Tuah Kumi
+Ahmed Iqbal, Aidan Forester, Javier Vite, Victor Tuah Kumi [Victor-Kumi](https://gh.linkedin.com/in/victor-tuah-kumi-aa137965)
