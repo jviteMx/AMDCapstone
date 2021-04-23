@@ -60,7 +60,7 @@ The goal is to load processed test suite data to our database. But what if we ha
 - `specs_file_path` Path to the `.txt` file that contains the GPU server specifications
 - `version`. The rocm version
 
-** Option 1**, use `strict_dir_path = <path_to_structured_folder>`. This is the preferred approach especially for processing multiple test suites at a go. A folder is structured in such a way that the above listed parameter arguments are inferred logically. NB: This is strict and the order must be obeyed. see examples below.
+**Option 1**, use `strict_dir_path = <path_to_structured_folder>`. This is the preferred approach especially for processing multiple test suites at a go. A folder is structured in such a way that the above listed parameter arguments are inferred logically. NB: This is strict and the order must be obeyed. see examples below.
 
 ![strict_dir_path example](Tree3.png)
 
