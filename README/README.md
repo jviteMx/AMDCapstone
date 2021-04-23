@@ -94,8 +94,10 @@ For libraries that are not already implemented (ie, not fft, rand or blas), a ne
 
 After overriding this method, the derived class can be instantiated and the `activate_process` method can be called with the needed argument values. Note that you must provide information for all necessary arguments. Refer to the docstring.
 
+### Running the command-line analyzer
+When you run the `analyzer.py` class, the main function will prompt the user to input the database name, collection name, and then the two columns for which the user would like to compute Linear Regression for. Any further statistics or functionalities of this class can be added as a function that is subsequently called in the main class. For the scope of this project, calculating the Linear Regression between two columns was sufficient. 
 
-### Adding new functionalities to dash
+### Adding new functionalities to the dashboard
 Depending on the library suite, there could be a need for customization of the plots. To customize, You have to make a new version of the application. In this version, you can add the custom plots to the `visuals.py` module. Note that there is no admin for the dashboard so all additional information needed in the database must be provided by `pargo`. Hence pargo could also be modified accordingly.
 
 ### Updating the database
