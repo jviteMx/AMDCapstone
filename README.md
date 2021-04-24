@@ -15,7 +15,7 @@ An overall timeline for this project puts the completion date around April 26th 
 The project scope is to develop a framework capable of testing, tracking, storing changes and data on the ROCm pipelines to better organize and understand the needs of the community. 
 This framework will measure performance of the math libraries by capturing results, historical trends, explore/query data, and visualize for further understanding. 
 To meet these goals a python library will be created that features functions to parse the data from .dat files, format it accordingly, and then uploads it to a database. 
-It is important for this library to be compatible with all mainstream import mechanisms, such as pip or conda.  
+It is important for this library to be compatible with all mainstream package management systems, such as pip or conda.  
 For the visualizations, a dashboard will be implemented to view the data in certain graphs that allow the user to interpret the data accordingly. 
 Due to time constraints, the dashboard will not be deployed on a web server but will be by AMD after this project’s timeline concludes.
 
