@@ -16,8 +16,6 @@ import model
 import visuals
 import specs
 
-selected_library = ''
-extras = ''
 def check_input_integrity(cell_visual_pair):
     validated_inputs = []
     cell = cell_visual_pair[0]                                                                            
@@ -37,7 +35,7 @@ def check_input_integrity(cell_visual_pair):
             error = construct_integrity_fail_message(message)
             return error  
         validated_inputs.append((field_type_selected, field_value_selected))
-    return validated_inputs                 
+    return validated_inputs        
 
 def construct_integrity_fail_message(error):
     error_toast = dbc.Toast(
@@ -47,29 +45,29 @@ def construct_integrity_fail_message(error):
             icon="danger",
             dismissable=True,
         )
-    return error_toast    
+    return error_toast
 
 def analyze_inputs(cell_visual_pair, library):
-    global selected_library
-    selected_library = library
     integrity_result = check_input_integrity(cell_visual_pair)
     if not isinstance(integrity_result, list):
         failed = integrity_result
         return failed
-    integrity_result = fix_version_all_case(integrity_result)
-    integrity_result = check_for_compulsory_fields(integrity_result)
+    integrity_result = fix_version_all_case(integrity_result, library)
+    integrity_result = check_for_compulsory_fields(integrity_result, library)
     if not isinstance(integrity_result, list):
         failed = integrity_result
         return failed
-    integrity_result = check_for_repetition(integrity_result)
+    inputs = integrity_result[0]
+    extras = integrity_result[1]    
+    integrity_result = check_for_repetition(inputs)
     if not isinstance(integrity_result, list):
         failed = integrity_result
         return failed
-    collection_ls = make_possible_collection_permutations(integrity_result)
+    collection_ls = make_possible_collection_permutations(inputs, library)
     if not isinstance(collection_ls, list):
         failed = collection_ls
         return failed
-    speedup_options = get_speedup_options(integrity_result)
+    speedup_options = get_speedup_options(inputs)
     if not isinstance(speedup_options, list):
         failed = speedup_options
         return failed
@@ -81,44 +79,47 @@ def analyze_inputs(cell_visual_pair, library):
         failed = construct_integrity_fail_message('Nothing found for selection')   
         return failed
     else:
-        graph = get_graph(integrity_result)
+        graph = get_graph(inputs)
         if not isinstance(graph, list):
             failed = graph
             return failed
-        versions = get_rocm_versions(integrity_result)
-        speedup_options = get_speedup_options(integrity_result) 
-        figure, table = visuals.make_graph_table(concat_df, "Performance Plot", graph[0], versions, speedup_options, selected_library, extras=extras) 
-        gpu_servers = get_gpu_servers(integrity_result)
+        versions = get_rocm_versions(inputs)
+        speedup_options = get_speedup_options(inputs) 
+        figure, table = visuals.make_graph_table(concat_df, "Performance Plot", graph[0], versions, speedup_options, library, extras=extras) 
+        gpu_servers = get_gpu_servers(inputs)
         gpu_server_specs = specs.get_specs(gpu_servers, versions)
-        if len(speedup_options) > 1 or selected_library.lower() == 'rocblas':
+        if len(speedup_options) > 1 or library.lower() == 'rocblas':
             return [figure, 'speedup', gpu_server_specs, table]
         else:
             return [figure, gpu_server_specs, table]    
-def fix_version_all_case(ls_of_tuples):
+def fix_version_all_case(ls_of_tuples, library):
     rocm_versions = get_rocm_versions(ls_of_tuples)
     if 'All' in rocm_versions:
         for i, data in enumerate(ls_of_tuples):
             if data[0] == "Version(s)" and 'All' in data[1]:
-                rocm_versions = model.get_field_values(selected_library, 'Version(s)')
+                rocm_versions = model.get_field_values(library, 'Version(s)')
                 rocm_versions = rocm_versions[:-1]
                 tupl_to_ls = list(data)
                 tupl_to_ls[1] = rocm_versions
                 ls_of_tuples[i] = tuple(tupl_to_ls)
     return ls_of_tuples         
-def check_for_compulsory_fields(ls_of_tuples):
-    global extras
+def check_for_compulsory_fields(ls_of_tuples, library):
+    added = False
     field_types = [item[0] for item in ls_of_tuples]
-    if selected_library.lower() == 'rocrand' and  'Algorithm' not in field_types:
+    if library.lower() == 'rocrand' and  'Algorithm' not in field_types:
         error =  construct_integrity_fail_message('Must contain HardWare-ID, Test-Suite, Version(s), Graph, Algorithm')
         return error
-    elif selected_library.lower() == 'rocrand':
+    if  library.lower() == 'rocrand':
         extras = [item[1] for item in ls_of_tuples if item[0]=='Algorithm']    
-        extras = [item for sublist in extras for item in sublist]  
+        extras = [item for sublist in extras for item in sublist]
+        added = True 
 
     if 'HardWare-ID' not in field_types or 'Test-Suite' not in field_types or 'Version(s)' not in field_types or 'Graph' not in field_types:
         error = construct_integrity_fail_message('Must contain HardWare-ID, Test-Suite, Version(s), Graph')
         return error
-    return ls_of_tuples
+    if added:
+        return [ls_of_tuples, extras]    
+    return [ls_of_tuples, []]
         
 def check_for_repetition(ls_of_tuples):
     contains_duplicates = any(ls_of_tuples.count(element) > 1 for element in ls_of_tuples)
@@ -127,13 +128,13 @@ def check_for_repetition(ls_of_tuples):
         return error
     return ls_of_tuples 
 
-def make_possible_collection_permutations(ls_of_tuples):
+def make_possible_collection_permutations(ls_of_tuples, library):
     gpu_servers = get_gpu_servers(ls_of_tuples)
     test_suites = get_test_suites(ls_of_tuples)
     rocm_versions = get_rocm_versions(ls_of_tuples)
     if 'All' in rocm_versions:
-        rocm_versions = model.get_field_values(selected_library, 'Version(s)')
-    library = selected_library.lower()
+        rocm_versions = model.get_field_values(library, 'Version(s)')
+    library = library.lower()
     gpu_servers, test_suites = check_for_possible_gpu_test_suite_conflict(gpu_servers, test_suites)
     if not isinstance(gpu_servers, list):
         failed = gpu_servers
@@ -199,8 +200,8 @@ def get_speedup_options(ls_of_tuples):
         error = construct_integrity_fail_message('Multiple speedup option field pair not allowed. Select all applicable in a single field pair')
         return error
     flattened_speedup_options = []
-    if speedup_options:  
-        flattened_speedup_options = [item for sublist in speedup_options for item in sublist]                             
+    if speedup_options:
+        flattened_speedup_options = [item for sublist in speedup_options for item in sublist]                  
     return flattened_speedup_options
 
 def get_graph(ls_of_tuples):

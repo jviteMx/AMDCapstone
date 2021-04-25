@@ -7,11 +7,14 @@
 # The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
 # Reach Victor Tuah Kumi on LinkedIn
 
-"""Where all dashboard data visualization objects are cooked. Plots and tables"""
+"""Where all dashboard data visualization objects are cooked. Plots and tables, 
+Non static layout components.
+"""
 
 import copy
 import pandas as pd
 import dash_core_components as dcc
+import dash_html_components as html
 import dash_bootstrap_components as dbc
 import dash_table
 import plotly.express as px
@@ -19,10 +22,9 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from dash_table.Format import Format, Scheme
 from databars_recipes import data_bars_diverging
+import model
 
-BAR_DATAFRAME = ''
-ALGORITHMS =''
-blas_dataframe, blas_graph, blas_versions, blas_speedup_options = '', '', '', ''
+
 def make_graph_table(dataframe, title, graph, versions, speedup_options, library, extras=None):
     """Constructs the graph and table visuals"""
     if graph == 'bar' and library.lower() == 'rocrand':
@@ -93,7 +95,6 @@ def make_graph_table(dataframe, title, graph, versions, speedup_options, library
         size=12,
         color="RebeccaPurple"
     ), hovermode='x unified')
-    # fig.update_xaxes(title_text="Problem Size (logarithmic)", type="log")
     fig.update_xaxes(title_text="Problem Size")
     fig.update_yaxes(title_text="Median Time (logarithmic)", type="log", secondary_y=False)
     fig.update_yaxes(title_text="Speedup", secondary_y=True)
@@ -144,11 +145,8 @@ def make_fft_table(df):
 
 def make_bar_plot(dataframe, title, extras, y_axis):
     """Make bar plot for rand for all selected algorithms"""
-    global BAR_DATAFRAME, ALGORITHMS
-    BAR_DATAFRAME = dataframe #globally used
-    df = BAR_DATAFRAME
-    # BAR_DATAFRAME = df
-    ALGORITHMS = extras
+    df = dataframe
+    df['group'] = df.apply(lambda row: ''.join(row.Algorithm.split('@')[1:]), axis = 1)
     interest_algos = []
     df_algos = df['Algorithm'].unique()
     for algo in extras:
@@ -158,13 +156,13 @@ def make_bar_plot(dataframe, title, extras, y_axis):
     dfs = [df[df['Algorithm']== algo] for algo in interest_algos]
     df = pd.concat(dfs)
     fig = px.bar(df, x="Algorithm", y=y_axis,
-                 color="Algorithm", height=800,
+                 color="group", height=800,
                  hover_data=['Size', 'Samples-GSample/s'], text=y_axis)
     fig.update_layout(title=title, height=800, font=dict(
         family="Courier New, monospace",
         size=14,
         color="RebeccaPurple"
-    ))
+    ), showlegend=False)
     return fig, None
 
 def add_rand_slider(plot_table, id_index):
@@ -172,7 +170,7 @@ def add_rand_slider(plot_table, id_index):
     Throughtput.
     """
     slider = dbc.Col(dcc.Slider(
-        id= {'type':'slider', 'index': id_index},
+        id= {'type':'rand-slider', 'index': id_index},
         min=0,
         max=1,
         step=None,
@@ -185,7 +183,7 @@ def add_rand_slider(plot_table, id_index):
     plot_table = [*plot_table, slider]
     return plot_table
 
-def make_rand_slider_plot(slide_num):
+def make_rand_slider_plot(slide_num, frame, algos):
     """Returns new plot figure for selected y_axis.
     Calls the make_bar function with the specified y_axis value.
     """
@@ -193,14 +191,11 @@ def make_rand_slider_plot(slide_num):
         y_axis = 'AvgTime(1 trial)-ms'
     else:
         y_axis = 'Throughput-GB/s'
-    figure, _ = make_bar_plot(BAR_DATAFRAME, "Performance Plot", ALGORITHMS, y_axis)
+    figure, _ = make_bar_plot(frame, "Performance Plot", algos, y_axis)
     return figure
 
-def make_blas_visuals(dataframe, title, graph, versions, speedup_options, sample=None):
+def make_blas_visuals(dataframe, title, graph, _, __, sample=None):
     """Returns figure and table for blas test suites"""
-    global blas_dataframe, blas_graph, blas_versions, blas_speedup_options
-    blas_dataframe, blas_graph, blas_versions, blas_speedup_options = \
-        dataframe, graph, versions, speedup_options
     platform_dfs = get_suite_frames(dataframe)
     sampled_dfs, sample = sample_dataframes(platform_dfs, sample)
     df = pd.concat(sampled_dfs)
@@ -212,7 +207,6 @@ def make_blas_visuals(dataframe, title, graph, versions, speedup_options, sample
     mask = df['collection'].unique()
     dfs = [df[df['collection']== collection] for collection in mask]
     for df in dfs:
-        # name = df.iloc[sample]['collection']
         name = df['collection'].unique()[0]   
         name = rename(name)
         fig.add_trace(go.Scatter(x=df['problem'], y=df['rocblas-Gflops'],
@@ -267,15 +261,15 @@ def add_blas_slider(plot_table, id_index):
         max=1,
         step=None,
         marks={
-            0: {'label':'sample1', 'style': {'color': '#f50'}},
-            1: {'label':'sample2', 'style': {'color': '#f50'}}
+            0: {'label':'NN/NT', 'style': {'color': '#f50'}},
+            1: {'label':'TN/TT', 'style': {'color': '#f50'}}
         },
         value=0
         ), xs=6, md=3, align='start', className='slider')
     plot_table = [*plot_table, slider]
     return plot_table
 
-def make_blas_slider_plot(slide_num):
+def make_blas_slider_plot(slide_num, blas_dataframe, blas_graph, blas_versions, blas_speedup_options):
     """Make plot for selected sampling point for blas. Calls the
     make_blas_visuals function for the visuals and returns it for plotting.
     """
@@ -303,3 +297,64 @@ def make_blas_table(df):
         style_table={'height': '500px', 'overflowY': 'auto'}
     )
     return table
+
+#Dynamic layout components below.
+
+def generate_add_field_button():
+    """Generates and returns button"""
+    element = html.Button("+Field", id='dynamic-add-field', n_clicks=0,
+                                   className='add-field-button')
+    return element
+
+def generate_remove_field_button():
+    """Generates and returns button"""
+    element = html.Button("-Field", id='dynamic-remove-field', n_clicks=0,
+                                   className='remove-field-button')
+    return element
+
+def generate_add_row_button():
+    """Generates and returns button"""
+    element = html.Button("+fieldCell", id='dynamic-add-twin-line', n_clicks=0,
+                           className='add-twin-line-button')
+    return element
+def generate_remove_row_button():
+    """Generates and returns button"""
+    element = html.Button("-fieldCell", id='dynamic-remove-twin-line',
+                       n_clicks=0, className='remove-twin-line-button')
+    return element
+
+def generate_field_pair(num_clicks, selected_library):
+    library = selected_library                
+    options = model.get_field_types(library)
+    options = [{'label': item, 'value': item} for item in options] 
+    field_pair = html.Div(html.Div(id={'type': 'field-dropdown', 'index': num_clicks}, children=[
+        html.Button('x', id={'type': 'self-remove', 'index': num_clicks}, className='self-remove-button', n_clicks=0),
+        html.Div(dcc.Dropdown(
+            id={'type': 'field-type-dropdown', 'index': num_clicks},
+            options=options,
+            placeholder='Field Type',
+            className='pair-type-dropdown',
+            style={'border-color': 'dodgerblue'}
+        ), id='type-dropdown'),
+        dcc.Dropdown(
+            id={'type':'field-value-dropdown', 'index': num_clicks},
+            options=[{'label':'Select Type', 'value':'Select Type', 'disabled':True, 'title': 'Select field type first'}],
+            placeholder='Field Value',
+            optionHeight=40,
+            className='pair-value-dropdown',
+            style={'border-color': 'dodgerblue'}
+        )],
+        className='dropdown-pair'
+    ), id='field-dropdown')
+    return field_pair
+
+def generate_row_level_buttons(num_clicks):
+    buttons = html.Div(id={'type': 'row-level-buttons', 'index': num_clicks},
+        children=[html.Button("x", id={'type':'row-remove-field','index':num_clicks}, n_clicks=0, className='row-level-remove-field'),
+                  html.Button("+", id={'type':'row-add-field','index':num_clicks}, n_clicks=0, className='row-level-add-field'),
+                  html.Button("Analyze", id={'type':'row-analyze-button','index':num_clicks}, n_clicks=0, className='row-level-analyze-button'),
+                  html.Button("/", id={'type':'row-toggle-button','index':num_clicks}, n_clicks=0, className='row-level-toggle')
+        ],
+        className='row-level-buttons'
+    )
+    return buttons    

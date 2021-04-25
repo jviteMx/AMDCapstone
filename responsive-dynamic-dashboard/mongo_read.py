@@ -8,27 +8,50 @@
 # Reach Victor Tuah Kumi on LinkedIn
 
 """Creates pymongo client object and read specified collections from specified mongoDB database"""
+from urllib.parse import quote_plus
 from pymongo import MongoClient
+from dotenv import dotenv_values
 import pandas as pd
 
 class MongoReader:
     """Creates user defined pymongo client and reads collections from mongoDB"""
-    def get_client_db(self, host, port, user_name, password, database):
+
+    def __init__(self):
+        self.dotenv_vals = dotenv_values()
+        self.user_name = None
+        self.password = None
+        self.host = None
+        self.db_name = None
+
+    def get_client_db(self, db_name):
         """get authorized client and connect to DB"""
-        if user_name and password:
-            uri = f'mongodb://{user_name}:{password}@{host}:{port}/{database}'
+        self.db_name = db_name
+        try:
+            self.user_name = self.dotenv_vals['PARGO_USER']
+            self.password = self.dotenv_vals['PARGO_PASSWORD']
+            self.host = self.dotenv_vals['PARGO_HOST']  # ip and port
+        except KeyError:
+            try:
+                self.host = self.dotenv_vals['PARGO_HOST']
+            except KeyError:
+                pass
+        if self.user_name and self.password:
+            self.user_name = quote_plus(self.user_name)
+            self.password = quote_plus(self.password)
+
+        if self.user_name and self.password and self.host:
+            uri = f'mongodb://{self.user_name}:{self.password}@\
+                {self.host}/{self.db_name}'
             client = MongoClient(uri)
+        elif self.host:
+            client = MongoClient(self.host)
         else:
-            client = MongoClient(host, port)
+            client = MongoClient()
+        return client[self.db_name]
 
-        return client[database]
-
-    def read_collection(self, database, collection, host='localhost', port=27017,
-                       user_name=None, password=None):
+    def read_collection(self, db_name, collection):
         """read Mongo collection and return pandas DataFrame"""
-        # Connect to MongoDB
-        database = self.get_client_db(host=host, port=port, user_name=user_name,
-                                     password=password, database=database)
+        database = self.get_client_db(db_name)
         query={}
         cursor = database[collection].find(query)
         if database[collection].count_documents({}):
