@@ -34,7 +34,7 @@ There are two ways to access the data base
 
 ### Processing Test Suites and Loading to the Database (Using `pargo` for implemented library test suite parsers; `rocFFT, rocBLAS, rocRAND`)
 ##### Initial Steps
-- Ensure that mongo service is alive.
+- Ensure that MongoDB server is running.
 - use `pip` to install the pargo library in your project virtual environment (the wheel is in the `dist` folder).
 - Create a `.env` file (preferably in your project's root folder.)
 - Provide the credentials to the mongo db database in the `.env` file (check the `.env.example` file in the library folder for the valid keys). NB: When no `.env` file is provided, `pargo` defaults to attempting to load the data to `localhost:27017`. You can also provide only the credential for the `PARGO_HOST` if no user and password is specified for the database. Thus you are not required to provide all the credentials unless a user and password exist for the database.
