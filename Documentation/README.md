@@ -85,11 +85,7 @@ You are good to run your program now!! Check `example1.py` and `example2.py` in 
 
 
 ### Running Dashboard
-This app has not been deployed, and only localhost run is available
-1) Download the "responsive-dynamic-dashboard" folder from the reopository
-2) Ensure all dependiencies are installed in a project folder's virtual environment. requirements.txt is sufficient. Also ensure that the database is running. Although you can, there is need to provide .env for reading from the database since so it is localhost:27017. 
-3) Run app.py
-4) Follow the link that is generated after running app.py
+Check the docker run steps
 
 
 ## Maintenance guide
