@@ -16,21 +16,34 @@
 
 There are two ways to access the data base
 1) via terminal
+
+
 	1.a)if on linux or Mac run command: sudo docker exec -it AMDcontainer bash
-	1.b)if on windows run command: docker exec -it AMDcontainer bash
-	2.) a line the says "Root"with a memory address pops up propmting to enter a command.
+
+
+	3.b)if on windows run command: docker exec -it AMDcontainer bash
+
+
+	5.) a line the says "Root"with a memory address pops up propmting to enter a command.
 		Enter command: mongo
+		
+		
 	3.) to view the data base enter command: showdb
+
+
 
 9.To run the dashboard container. Make sure image is up and runing.
   in mongo_read.py make sure that your url to acces the database matches the name of the container created and the ports for it.
   client = MongoClient('mongodb://<containerName>:27017')
+	
   example:
   client = MongoClient('mongodb://AMDcontainer:27017')
+  
   In app.py make sure this line is correct acording to your particular network setup
   app.run_server(debug=True, port=8080, host="0.0.0.0")
+  
   port should be the one delcared for dash in the .yml file
-
+  
 10.To load database information see next.
 
 
