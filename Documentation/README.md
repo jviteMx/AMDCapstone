@@ -106,7 +106,7 @@ Depending on the library suite, there could be a need for customization of the p
 
 ### Database structure
 `MongoDB` does not need any schema upfront to work. You can have several DBs in a single `mongoDB` installation. The structure of DBs is specified by the code at runtime. DBs and collections are created at runtime. 
-The DBs are created for any new GPU server added when the `activate_process` method of a library suite processor object is called. Recommended names are of format `GPU-Server-N` where N is an integer. There is also created an auxiliary database called `aux-db`. Whislt the test suite data are loaded to the dynamically created DBs, auxiliary collections like field types and field names for all libraries needed by dashboard are stored in the `aux-db`. You are encouraged to check the mongoDB server for available ids so that you do not conflict them. Open terminal and enter these commands whilst service is on.
+The DBs are created for any new GPU server added when the `activate_process` method of a library suite processor object is called. Recommended names are of format `GPU-Server-N` where N is an integer. There is also created an auxiliary database called `aux-db`. Whislt the test suite data are loaded to the dynamically created DBs, auxiliary collections like field types and field names for all libraries needed by dashboard are stored in the `aux-db`. You are encouraged to check the mongoDB server for available ids by way of DB names so that you do not conflict them. Open terminal and enter these commands whilst service is on.
 
 - `mongo`
 - `show dbs`
