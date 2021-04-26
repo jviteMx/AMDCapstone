@@ -10,31 +10,9 @@
 3. Run the command: docker-compose up
 4. Open a second CMD line and run it as an administrator
 5. Optional step, if you want to check the status of the containers run the command : docker ps
-
-There are two ways to access the data base
-1) via terminal
-	1.  a)if on linux or Mac run command: sudo docker exec -it AMDcontainer bash  
-	1.  b)if on windows run command: docker exec -it AMDcontainer bash  
-	2.) a line the says "Root"with a memory address pops up propmting to enter a command.  
-		Enter command: mongo  
-	3.) to view the data base enter command: showdb  
-
-2) via mongodb plugin for vscode
-	1) go to extensions in vscode and search for mongodb plugin and download
-	2) Once downloaded the mongodb icon will appear on the left side of your IDE
-	3) click on the icon
-	4) on the left side of the screen click "add a connection", a text bar will appear at the top of your ide
-	5) eg. if localhost, you can copy and paste this link and hit enter: mongodb://127.0.0.1:27020
-
 6. In order to stop the docker container from running, on the second terminal, type 'exit' and enter, then 'exit' and enter agian untill
 	you have naviagted back to the root prompt
-7. Run the command: docker stop AMDcontainer
-8. you are now safe to close both terminals and all relevant windows
-9. 1. In order to start, run a CMD line as an adminsitrator
-2. Navigate to the path of the folder the "docker-compose" file is in
-3. Run the command: docker-compose up
-4. Open a second CMD line and run it as an administrator
-5. Optional step, if you want to check the status of the containers run the command : docker ps
+7. Optional step, if you want to check the status of the containers run the command : docker ps
 
 There are two ways to access the data base
 1) via terminal
@@ -44,28 +22,16 @@ There are two ways to access the data base
 		Enter command: mongo
 	3.) to view the data base enter command: showdb
 
-2) via mongodb plugin for vscode
-	1) go to extensions in vscode and search for mongodb plugin and download
-	2) Once downloaded the mongodb icon will appear on the left side of your IDE
-	3) click on the icon
-	4) on the left side of the screen click "add a connection", a text bar will appear at the top of your ide
-	5) copy and paste this link and hit enter: mongodb://127.0.0.1:27017
-
-6. In order to stop the docker container from running, on the second terminal, type 'exit' and enter, then 'exit' and enter agian untill
-	you have naviagted back to the root prompt
-7. Run the command: docker stop AMDcontainer
-8. you are now safe to close both terminals and all relevant windows
-
 9.To run the dashboard container. Make sure image is up and runing.
   in mongo_read.py make sure that your url to acces the database matches the name of the container created and the ports for it.
   client = MongoClient('mongodb://<containerName>:27017')
   example:
-  client = MongoClient('mongodb://AMDcontainer2:27017')
+  client = MongoClient('mongodb://AMDcontainer:27017')
   In app.py make sure this line is correct acording to your particular network setup
   app.run_server(debug=True, port=8080, host="0.0.0.0")
   port should be the one delcared for dash in the .yml file
 
-10.To load data to database see next.
+10.To load database information see next.
 
 
 
