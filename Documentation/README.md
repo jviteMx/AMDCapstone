@@ -34,13 +34,13 @@ There are two ways to access the data base
 
 ### Processing Test Suites and Loading to the Database (Using `pargo` for implemented library test suite parsers; `rocFFT, rocBLAS, rocRAND`)
 ##### Initial Steps
-- Ensure that MongoDB server is running.
+- Ensure that MongoDB server is running. Use docker instructions
 - use `pip` to install the pargo library in your project virtual environment (the wheel is in the `dist` folder).
-- Create a `.env` file (preferably in your project's root folder.)
-- Provide the credentials to the mongo db database in the `.env` file (check the `.env.example` file in the library folder for the valid keys). NB: When no `.env` file is provided, `pargo` defaults to attempting to load the data to `localhost:27017`. You can also provide only the credential for the `PARGO_HOST` if no user and password is specified for the database. Thus you are not required to provide all the credentials unless a user and password exist for the database.
+- Create a `.env` file (preferably in your project's root folder.) `NOT NEEDED FOR DOCKER RUN`
+- Provide the credentials to the mongo db database in the `.env` file (check the `.env.example` file in the library folder for the valid keys). NB: When no `.env` file is provided, `pargo` defaults to attempting to load the data to `localhost:27017`. You can also provide only the credential for the `PARGO_HOST` if no user and password is specified for the database. Thus you are not required to provide all the credentials unless a user and password exist for the database. `NOT NEEDED FOR DOCKER RUN`
 
 ##### Further Steps
-- import the library test suite parser classes from the parser modules  eg. `from pargo.fft import FFTSuiteProcessor` imports the class `FFTSuiteProcessor`. You can also import the implemented parser modules and not the classes. eg. `from pargo import <modlue>` module can be `fft`, `blas`, `rand`
+- import the library test suite parser classes from the parser modules  eg. `from pargo.fft import FFTSuiteProcessor` Or `from pargo.templates import FFTSuiteProcessor` imports the class `FFTSuiteProcessor`. You can also import the implemented parser modules and not the classes. eg. `from pargo import <modlue>` module can be `fft`, `blas`, `rand`.
 - To run the parser, you need to instantiate a library suite processor class and call its `activate_process` method. This method offers several valid argument options that we discuss below
 
 ##### `activate_process` method call options
