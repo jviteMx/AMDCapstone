@@ -110,10 +110,11 @@ The DBs are created for any new GPU server added when the `activate_process` met
 
 - `mongo`
 - `show dbs`
+
 Other useful commands are
 - `use <name-of-db>`
 - `show collections`
-- `<name-of-db>['<name-of-collection>'].find()`. This shows the documents in the collection
+- `<name-of-db>['<name-of-collection>'].find()`. This shows the documents in the collection. Think of a single document in mongoDB as a single record or row or data sample
 
 The collection names are crafted at runtime by concatenating strings that have some form of meaning independently. eg. for rocfft rocm3.6 suite `radix2_dim1_double_n1_c2c_inplace.dat` that was run on say GPU-Server-1, the code will extract this name `r2-d1-n1-c2c-ip` and this name is stored in `aux-db` in the `library-suite-name` collection. Whilst the data contained in the suite is stored in `gpu-server-1` DB in a collection named `gpu-server-1/rocfft/rocm3.6/r2-d1-n1-c2c-ip`. All happens at runtime and the user has no burden of creating them. An extra useful reason for this naming pattern is that, if we ever want to store all data in a singl DB, we would only have to change a couple of lines in the code. Below is an example. `gpu-server-1`, `gpu-server-2`and `aux-db` are the DBs. Again, this structure is created at runtime and not upfront.
 ![MongoDB runtime structure](mongoDBstructure.png)
