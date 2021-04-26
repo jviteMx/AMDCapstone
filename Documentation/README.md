@@ -30,7 +30,7 @@ There are two ways to access the data base
 		
 	3.) to view the data base enter command: showdb
 
-9.To load database information see next step.  NOTE: BEFORE YOU RUN THE DASHBOARD DATA HAS TO BE LOADED TO THE DATABASE.
+9.To load data to database, see next heading.  NOTE: BEFORE YOU RUN THE DASHBOARD DATA HAS TO BE LOADED TO THE DATABASE.
 
 10.To run the dashboard container. Make sure image is up and runing.
   in mongo_read.py make sure that your url to acces the database matches the name of the container created and the ports for it.
