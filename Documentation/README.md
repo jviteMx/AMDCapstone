@@ -104,9 +104,19 @@ When you run the `analyzer.py` class, the main function will prompt the user to 
 ### Adding new functionalities to the dashboard
 Depending on the library suite, there could be a need for customization of the plots. To customize, You have to make a new version of the application. In this version, you can add the custom plots to the `visuals.py` module. Note that there is no admin for the dashboard so all additional information needed in the database must be provided by `pargo`. Hence pargo could also be modified accordingly.
 
-### Updating the database
+### Database structure
+`MongoDB` does not need any schema upfront to work. You can have several DBs in a single `mongoDB` installation. The structure of DBs is specified by the code at runtime. DBs and collections are created at runtime. 
+The DBs are created for any new GPU server added when the `activate_process` method of a library suite processor object is called. Recommended names are of format `GPU-Server-N` where N is an integer. There is also created an auxiliary database called `aux-db`. Whislt the test suite data are loaded to the dynamically created DBs, auxiliary collections like field types and field names for all libraries needed by dashboard are stored in the `aux-db`. You are encouraged to check the mongoDB server for available ids so that you do not conflict them. Open terminal and enter these commands whilst service is on.
 
+- `mongo`
+- `show dbs`
+Other useful commands are
+- `use <name-of-db>`
+- `show collections`
+- `<name-of-db>['<name-of-collection>'].find()`. This shows the documents in the collection
 
+The collection names are crafted at runtime by concatenating strings that have some form of meaning independently. eg. for rocfft rocm3.6 suite `radix2_dim1_double_n1_c2c_inplace.dat` that was run on say GPU-Server-1, the code will extract this name `r2-d1-n1-c2c-ip` and this name is stored in `aux-db` in the `library-suite-name` collection. Whilst the data contained in the suite is stored in `gpu-server-1` DB in a collection named `gpu-server-1/rocfft/rocm3.6/r2-d1-n1-c2c-ip`. All happens at runtime and the user has no burden of creating them. An extra useful reason for this naming pattern is that, if we ever want to store all data in a singl DB, we would only have to change a couple of lines in the code. Below is an example. `gpu-server-1`, `gpu-server-2`and `aux-db` are the DBs. Again, this structure is created at runtime and not upfront.
+![MongoDB runtime structure](mongoDBstructure.png)
 
 ## Contributors
 
