@@ -65,7 +65,7 @@ There are two ways to access the data base
   app.run_server(debug=True, port=8080, host="0.0.0.0")
   port should be the one delcared for dash in the .yml file
 
-10.To load database information see next.
+10.To load data to database see next.
 
 
 
