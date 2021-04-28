@@ -80,5 +80,5 @@ class PymongoClient:
         elif self.host:
             client = MongoClient(self.host)
         else:
-            client = MongoClient('mongodb://rocm_mongo:27016')
+            client = MongoClient('mongodb://rocm_mongo:27017')
         return client[self.db_name]

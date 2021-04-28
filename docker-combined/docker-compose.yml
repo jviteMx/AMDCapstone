@@ -21,7 +21,7 @@ services:
             - 'database'     
     database:
         image: 'mongo'
-        command: mongod --port 27016
+        command: mongod --port 27017
         container_name: 'rocm_mongo'
         environment:
             - MONGO_INITDB_DATABASE=rocm_db
@@ -31,5 +31,5 @@ services:
             - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro 
             - ./mongo-volume:/data/db 
         ports:
-            - '27016:27016'
+            - '27017:27017'
         restart: always
