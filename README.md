@@ -27,4 +27,6 @@ Due to time constraints, the dashboard will not be deployed on a web server but 
 - The dashboard will be served on `http://0.0.0.0:8082/` or `http://127.0.0.1:8082/`. Enter in browser to interact.
 - You may have to the stop the containers gracefully and restart by typing `docker-compose up` if dashboard does not load all libraries at the first spin.
 
-For further documentation look in the Documentation folder in the main branch of this repository
+> To write test suite data to the database whenever the db container is on, check in `Documentation` folder under `Processing Test Suites and Loading to the Database (Using pargo for implemented library test suite parsers; rocFFT, rocBLAS, rocRAND)`
+
+For further Guide look in the Documentation folder in the main branch of this repository
