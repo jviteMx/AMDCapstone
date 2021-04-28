@@ -9,14 +9,14 @@ services:
             - "8082:8082"
         depends_on:
             - "rocm_data"
+        restart: on-failure:10    
     rocm_data:
         image: 'file_parse'
         container_name: 'file_parse'
         build: 
             context: .
             dockerfile: dockerfile.fileparse
-        command: 'python fileparse.py'
-        command: tail -f /dev/null   
+        command: 'python fileparse.py'  
         depends_on: 
             - 'database'     
     database:
