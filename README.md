@@ -1,10 +1,10 @@
-# AMDCapstone
+# Provide Name
 
 
 
-AMD features one of the world's most sophisticated core processors in the world which is used for countless supercomputers around North America.  
-To keep up with the demand for better and faster products, many rapid upgrades to the software are needed, which makes quality control difficult. 
-Due to AMD’s lack of a regulated software testing platform, tracking the performance between updates is currently very time consuming.  
+AMD manufactures some of the world's most sophisticated CPUs, GPUs and APUs in the world which are used for HPC applications.  
+To keep up with the demand for better and faster products, many rapid upgrades to the ROCm software suite is needed, which makes quality control difficult. 
+Due to ROCm’s lack of a software testing platform for performance, tracking the performance between updates is currently very time consuming.  
 The purpose of this project is to develop a platform for AMD to be able to test their product’s improvements in a timely manner, 
 ensuring that they can keep up with the demand for their hardware.  This platform will feature tools to fetch and upload data to a database,
 where a dashboard will display visualizations of the data that allows a user to understand the performances of selected ROCm versions. 
