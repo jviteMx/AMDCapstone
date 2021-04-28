@@ -19,5 +19,12 @@ It is important for this library to be compatible with all mainstream package ma
 For the visualizations, a dashboard will be implemented to view the data in certain graphs that allow the user to interpret the data accordingly. 
 Due to time constraints, the dashboard will not be deployed on a web server but will be by AMD after this project’s timeline concludes.
 
+# Quick Spin using `docker-compose`
+
+- Clone the repository 
+- Open terminal and cd into the `docker-combined` repository.
+- Enter the commands `docker-compose build` and then `docker-compose up`. If on linux use `sudo docker-compose build` and `sudo docker-compose up`. This will spin up three container processes in the order, mongodb, load data to db, and dashboard. `database`, `rocm_data` and `dashboard`.
+- The dashboard will be served on `http://0.0.0.0:8082/` or `http://127.0.0.1:8082/`. Enter in browser to interact.
+- You may have to the stop the containers gracefully and restart by typing `docker-compose up` if dashboard does not load all libraries at the first spin.
 
 For further documentation look in the Documentation folder in the main branch of this repository
