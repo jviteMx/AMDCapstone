@@ -1,0 +1,2 @@
+python-dotenv==0.17.0
+pymongo==3.11.3

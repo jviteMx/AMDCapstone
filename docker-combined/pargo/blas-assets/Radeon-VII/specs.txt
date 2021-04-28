@@ -1,0 +1,14 @@
+Host info:
+    cpu info: AMD Ryzen 9 3950X 16-Core Processor
+    distro: Ubuntu 18.04.4 LTS
+    hostname: cgy-arbok
+    kernel version: 5.4.0-42-generic
+    ram: 62 GiB
+    rocm version: 4.0.0-6132
+Device info:
+    device: Radeon-VII 0x687f
+    memory clock: 800Mhz
+    performance level: 
+    system clock: 1269Mhz
+    vbios version: 113-EXT33736-001
+    vram: VRAM Total Memory (B) 857315737

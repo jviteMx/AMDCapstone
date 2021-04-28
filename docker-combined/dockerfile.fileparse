@@ -1,0 +1,8 @@
+FROM python:3.9.1
+
+ENV PYTHONUNBUFFERED 1
+RUN mkdir /pargo
+WORKDIR /pargo
+COPY ./pargo /pargo/
+RUN pip install -r requirements.txt
+CMD ["python", "fileparse.py"]

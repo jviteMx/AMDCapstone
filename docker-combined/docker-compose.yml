@@ -1,0 +1,35 @@
+version: '3'
+services: 
+    dashboard:
+        image: rocm_dash_dashboard
+        container_name: 'rocm_dash_dashboard'
+        build: .
+        command: "python app.py"
+        ports:
+            - "8082:8082"
+        depends_on:
+            - "rocm_data"
+    rocm_data:
+        image: 'file_parse'
+        container_name: 'file_parse'
+        build: 
+            context: .
+            dockerfile: dockerfile.fileparse
+        command: 'python fileparse.py'
+        command: tail -f /dev/null   
+        depends_on: 
+            - 'database'     
+    database:
+        image: 'mongo'
+        command: mongod --port 27016
+        container_name: 'rocm_mongo'
+        environment:
+            - MONGO_INITDB_DATABASE=rocm_db
+            - MONGO_INITDB_USERNAME=rocm_user
+            - MONGO_INITDB_PASSWORD=rocm_password
+        volumes:
+            - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro 
+            - ./mongo-volume:/data/db 
+        ports:
+            - '27016:27016'
+        restart: always
