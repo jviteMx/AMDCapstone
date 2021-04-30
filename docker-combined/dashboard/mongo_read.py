@@ -1,26 +1,11 @@
-# MIT License
-
-# This project is a software package to automate the performance tracking of the HPC algorithms
-
-# Copyright (c) 2021. Victor Tuah Kumi, Ahmed Iqbal, Javier Vite, Aidan Forester
-
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-
-# The above copyright notice and this permission notice shall be included in all
-# copies or substantial portions of the Software.
-
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# MIT LINCENCE. 2021
+#
+# This file is part of an academic capstone project,
+# and it is made for AMD as part of efforts to automate
+# the open source ROCM math libraries performance analytics.
+# Contact The AMD rocm team for use and improvements on the project.
+# The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
+# Reach Victor Tuah Kumi on LinkedIn
 
 """Creates pymongo client object and read specified collections from specified mongoDB database"""
 from urllib.parse import quote_plus
@@ -61,7 +46,7 @@ class MongoReader:
         elif self.host:
             client = MongoClient(self.host)
         else:
-            client = MongoClient('mongodb://rocm_mongo:27017')
+            client = MongoClient()
         return client[self.db_name]
 
     def read_collection(self, db_name, collection):
