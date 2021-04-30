@@ -1,14 +1,29 @@
-# MIT LINCENCE. 2021
-#
-# This file is part of an academic capstone project,
-# and it is made for AMD as part of efforts to automate
-# the open source ROCM math libraries performance analytics.
-# Contact The AMD rocm team for use and improvements on the project.
-# The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
-# Reach Victor Tuah Kumi on LinkedIn
+# MIT License
+
+# This project is a software package to automate the performance tracking of the HPC algorithms
+
+# Copyright (c) 2021. Victor Tuah Kumi, Ahmed Iqbal, Javier Vite, Aidan Forester
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """App center. Specifies the layout dynamically with pattern matching
-and also the callbacks
+and hosts callback functions.
 """
 
 from textwrap import dedent
@@ -69,8 +84,9 @@ def update_header_menu(library, children, _, layout_children):
 def add_remove_field_or_cell(add_button_clicks, _, ___, ____, jsonified_selected_lib, rows_div_children):
     """Adds field pair to row"""
     clicks_num = uuid.uuid4().int
-    clicks_num = int(str(clicks_num)[-10:-1])
+    clicks_num = int(str(clicks_num)[-13:-1])
     ctx = dash.callback_context
+    rows_div_children = [i for i in rows_div_children if i['props']['children'] != []]
     if (add_button_clicks == 0 and (ctx.triggered[0]['prop_id'].split('.')[0]\
         !="dynamic-remove-field" and ctx.triggered[0]['prop_id'].split('.')[0]\
         !="dynamic-add-twin-line" and ctx.triggered[0]['prop_id'].split('.')[0]\
@@ -82,7 +98,7 @@ def add_remove_field_or_cell(add_button_clicks, _, ___, ____, jsonified_selected
             new_row = html.Div(children=[dbc.Row(children=
                 [dbc.Col(field_pair,xs=6, md=4, lg=3, xl=2),
                 dbc.Col(row_level_buttons,xs=6, md=4, lg=3, xl=2, align='center')],
-                style={'background-color': '#AAB8C2', 'margin-top': '-12px', 'border-bottom': '2px solid #ffcccb'}),
+                style={'background-color': '#AAB8C2', 'margin-top': '-12px', 'border-bottom': '2px solid #ffcccb'}, id={'type':'cell-row', 'index':clicks_num}, className=clicks_num),
                 html.Div(children=[], id={'type':'md+graphs-rows', 'index':clicks_num}),
                 html.Div(id={'type':'intermediate-visual-state', 'index':clicks_num}, style={'display': 'none'}),
             ],
@@ -91,25 +107,28 @@ def add_remove_field_or_cell(add_button_clicks, _, ___, ____, jsonified_selected
 
             rows_div_children.append(new_row)
         else:
+            field_pair = visuals.generate_field_pair(clicks_num, json.loads(jsonified_selected_lib))
             temp = rows_div_children[-1]['props']['children'][0]['props']['children'].pop()
             rows_div_children[-1]['props']['children'][0]['props']['children']\
                 .extend((dbc.Col(field_pair, xs=6, md=4, lg=3, xl=2),temp))
     elif (ctx.triggered and ctx.triggered[0]['prop_id'].split('.')[0]=="dynamic-remove-field")\
-         and len(rows_div_children) > 0 and len(rows_div_children[-1]['props']['children'][0]['props']['children'])>=1:
-                                                                                      
-        try:
-            #Need to refactor with dictionary query tool like JMESPath
-            value = rows_div_children[-1]['props']['children'][0]['props']['children'][-2]['props']['children']['props']['children']['props']['children'][1]['props']['value']
-        except IndexError:
-            value = None
-        except KeyError:
-            value = None
-        if value is not None:
-            rows_div_children[-1]['props']['children'][1]['props']['children']  = []
-        try:
-            rows_div_children[-1]['props']['children'][0]['props']['children'].pop(-2)
-        except IndexError:
-            pass
+         and len(rows_div_children) > 0:
+        if len(rows_div_children[-1]['props']['children'][0]['props']['children']) > 2:
+            try:
+                #Need to refactor with dictionary query tool like JMESPath
+                value = rows_div_children[-1]['props']['children'][0]['props']['children'][-2]['props']['children']['props']['children']['props']['children'][2]['props']['value']
+            except IndexError:
+                value = None
+            except KeyError:
+                value = None
+            if value is not None:
+                rows_div_children[-1]['props']['children'][1]['props']['children']  = []
+            try:
+                rows_div_children[-1]['props']['children'][0]['props']['children'].pop(-2)
+            except IndexError:
+                pass
+        elif len(rows_div_children[-1]['props']['children'][0]['props']['children']) <= 2:
+            rows_div_children[-1]['props']['children'] = []
         return rows_div_children
     elif (ctx.triggered and ctx.triggered[0]['prop_id'].split('.')[0]=="dynamic-add-twin-line"):
         if len(rows_div_children) == 0:
@@ -119,7 +138,7 @@ def add_remove_field_or_cell(add_button_clicks, _, ___, ____, jsonified_selected
         field_pair = visuals.generate_field_pair(clicks_num, json.loads(jsonified_selected_lib))
         row_level_buttons = visuals.generate_row_level_buttons(clicks_num)
         new_row = html.Div(children=[dbc.Row(children=[dbc.Col(field_pair,xs=6, md=4, lg=3, xl=2),
-                 dbc.Col(row_level_buttons,xs=6, md=4, lg=3, xl=2, align='center')], style=style),
+                 dbc.Col(row_level_buttons,xs=6, md=4, lg=3, xl=2, align='center')], style=style, id={'type':'cell-row', 'index':clicks_num}, className=clicks_num),
             html.Div(children=[], id={'type':'md+graphs-rows', 'index':clicks_num}),
             html.Div(id={'type':'intermediate-visual-state', 'index':clicks_num}, style={'display': 'none'}),
         ],
@@ -188,17 +207,18 @@ def analyze_or_alter_row_cell(_, __, ___, ____, jsonified_selected_lib, row_visu
         row_visual_pair[0]['props']['children'] = [*row_visual_pair[0]['props']['children'][:-1],
                             dbc.Col(field_pair, xs=6, md=4, lg=3, xl=2), row_visual_pair[0]['props']['children'][-1]]
     elif triggered_id == 'row-remove-field':
-        if len(row_visual_pair[0]['props']['children']) > 1:
+        if len(row_visual_pair[0]['props']['children']) > 2:
             try:
-                value = row_visual_pair[0]['props']['children'][-2]['props']['children']['props']['children']['props']['children'][1]['props']['value']
+                value = row_visual_pair[0]['props']['children'][-2]['props']['children']['props']['children']['props']['children'][2]['props']['value']
             except KeyError:
                 value = 'none'
             if value != 'none':
                 row_visual_pair[1]['props']['children']  = []
             row_visual_pair[0]['props']['children'].pop(-2)
+        elif len(row_visual_pair[0]['props']['children']) <= 2:
+            row_visual_pair = []
         else:
             pass
-
     elif triggered_id == 'row-analyze-button':
         analyze_clicks = triggered_idx
         visual_output = analysis.analyze_inputs(row_visual_pair, json.loads(jsonified_selected_lib))
@@ -319,4 +339,4 @@ def get_what_to_save(cell_visual_pair, library):
     return [df_json, extras]
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run_server(debug=True, port=8082, host="0.0.0.0")
