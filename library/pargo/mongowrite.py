@@ -1,11 +1,26 @@
-# MIT LINCENCE. 2021
-#
-# This file is part of an academic capstone project,
-# and it is made for AMD as part of efforts to automate
-# the open source ROCM math libraries performance analytics.
-# Contact The AMD rocm team for use and improvements on the project.
-# The team: Victor Tuah Kumi, Aidan Forester, Javier Vite, Ahmed Iqbal
-# Reach Victor Tuah Kumi on LinkedIn
+# MIT License
+
+# This project is a software package to automate the performance tracking of the HPC algorithms
+
+# Copyright (c) 2021. Victor Tuah Kumi, Ahmed Iqbal, Javier Vite, Aidan Forester
+
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
 
 """Creates MongoDB client and writes data to mongo."""
 
@@ -51,7 +66,7 @@ class PymongoClient:
         dotenv_vals = dotenv_values()
         if dotenv_vals.__len__() == 0:
             print('You have not provided a .env file with address to database'
-                  '. Program will attempt to use localhost:27017')
+                  '. Program will attempt to use address it finds during execution')
         self.user_name = ''
         self.password = ''
         self.host = ''
