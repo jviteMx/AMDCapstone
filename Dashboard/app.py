@@ -34,7 +34,8 @@ import dash
 import dash_core_components as dcc
 import dash_html_components as html
 import dash_bootstrap_components as dbc
-from dash.dependencies import Output, Input, State, MATCH
+from dash.dependencies import Output, Input, State, MATCH, ALL
+from dash.exceptions import PreventUpdate
 import layout
 import model
 import analysis
@@ -178,6 +179,32 @@ def update_library_field_value(field_type, jsonified_selected_lib, _, field_valu
     return [options, is_multi_selection]
 
 @app.callback(
+    Output({'type': 'cell-row', 'index':ALL}, 'children'),
+    Input({'type': 'self-remove', 'index':ALL}, 'n_clicks'),
+    State({'type': 'cell-row', 'index': ALL}, 'children'),
+    prevent_initial_call=True
+)
+def self_remove_field_pair(self_remove_clicks, cells):
+    if not any(self_remove_clicks):
+        raise PreventUpdate  # prevents cyclic behavior with analyze_or_alter_row_cell callback
+    ctx = dash.callback_context
+    triggered_idx = ctx.triggered[0]['prop_id'].split('.')[0].split(':')[1].split(',')[0]
+    flag = False
+    cell_idx = ''
+    for i, data in enumerate(cells):
+        for j, drops in enumerate(data[:-1]):
+            if drops['props']['children']['props']['children']['props']['children'][0]['props']['id']['index'] == int(triggered_idx):
+                cell_idx = i
+                drop_idx = j
+                del cells[cell_idx][drop_idx]
+                flag = True
+                break
+            continue
+        if flag:
+            break
+    return cells
+
+@app.callback(
     [Output({'type':'row+visual-div', 'index':MATCH}, 'children'),
      Output({'type':'intermediate-visual-state', 'index':MATCH}, 'children')
     ],
@@ -197,6 +224,8 @@ def analyze_or_alter_row_cell(_, __, ___, ____, jsonified_selected_lib, row_visu
     num_clicks = uuid.uuid4().int
     num_clicks = int(str(num_clicks)[-11:-1])
     ctx = dash.callback_context
+    if len(ctx.triggered) > 1:
+        raise PreventUpdate  # prevents cyclic behavior with self-remove_field_pair callback
     try:
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0].split(':')[2].strip('}"')
         triggered_idx = ctx.triggered[0]['prop_id'].split('.')[0].split(':')[1].split(',')[0]
