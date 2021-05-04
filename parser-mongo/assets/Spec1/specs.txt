@@ -1,0 +1,14 @@
+Host info:
+    hostname:       E1
+    cpu info:       AMD EPYC 7542 32-Core Processor
+    ram:            503.70 GiB
+    distro:         Ubuntu 18.04.5 LTS
+    kernel version: 4.15.0-112-generic
+    rocm version:   3.9.0-2265
+Device info:
+    device:            0x66a1
+    vbios version:     113-D3430401-E35
+    vram:              31.98 GiB
+    performance level: high
+    system clock:      1800Mhz
+    memory clock:      1000Mhz
